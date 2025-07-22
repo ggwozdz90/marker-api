@@ -16,6 +16,7 @@ class AppConfig:
     marker_model_name: Optional[str]
     file_upload_path: Optional[str]
     delete_files_after_processing: Optional[bool]
+    marker_model_download_path: Optional[str]
 
     def __new__(cls) -> "AppConfig":
         if cls._instance is None:
@@ -38,6 +39,7 @@ class AppConfig:
         self.marker_model_name = os.getenv("MARKER_MODEL_NAME", "vikp/marker")
         self.file_upload_path = os.getenv("FILE_UPLOAD_PATH", "uploaded_files")
         self.delete_files_after_processing = self._str_to_bool(os.getenv("DELETE_FILES_AFTER_PROCESSING", "true"))
+        self.marker_model_download_path = os.getenv("MARKER_MODEL_DOWNLOAD_PATH", "downloaded_marker_models")
 
     def initialize(
         self,
@@ -54,7 +56,8 @@ class AppConfig:
             f"DEVICE: {self.device}\n"
             f"MARKER_MODEL_NAME: {self.marker_model_name}\n"
             f"FILE_UPLOAD_PATH: {self.file_upload_path}\n"
-            f"DELETE_FILES_AFTER_PROCESSING: {self.delete_files_after_processing}"
+            f"DELETE_FILES_AFTER_PROCESSING: {self.delete_files_after_processing}\n"
+            f"MARKER_MODEL_DOWNLOAD_PATH: {self.marker_model_download_path}"
         )
         logger.info(config_message)
         logger.info("Configuration initialized successfully.")

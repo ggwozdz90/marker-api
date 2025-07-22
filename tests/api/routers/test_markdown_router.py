@@ -1,9 +1,8 @@
 from unittest.mock import AsyncMock, Mock
 
 import pytest
-from fastapi import UploadFile
+from fastapi import Response, UploadFile
 
-from api.dtos.markdown_response_dto import MarkdownResponseDTO
 from api.routers.markdown_router import MarkdownRouter
 from application.usecases.convert_document_usecase import ConvertDocumentUseCase
 
@@ -37,5 +36,8 @@ async def test_markdown(
 
     # Then
     mock_convert_document_to_markdown_usecase.execute.assert_called_once_with(mock_file)
-    assert isinstance(result, MarkdownResponseDTO)
-    assert result.content == "# Test Markdown Content"
+    assert isinstance(result, Response)
+    assert result.body == b"# Test Markdown Content"
+    assert result.media_type == "text/markdown"
+    assert "Content-Disposition" in result.headers
+    assert result.headers["Content-Disposition"] == 'attachment; filename="test.pdf.md"'

@@ -1,8 +1,7 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Response, UploadFile
 
-from api.dtos.markdown_response_dto import MarkdownResponseDTO
 from application.usecases.convert_document_usecase import ConvertDocumentUseCase
 
 
@@ -15,9 +14,11 @@ class MarkdownRouter:
         self,
         convert_document_usecase: Annotated[ConvertDocumentUseCase, Depends()],
         file: UploadFile = File(...),
-    ) -> MarkdownResponseDTO:
+    ) -> Response:
         markdown_content = await convert_document_usecase.execute(file)
 
-        return MarkdownResponseDTO(
+        return Response(
             content=markdown_content,
+            media_type="text/markdown",
+            headers={"Content-Disposition": f'attachment; filename="{file.filename}.md"'},
         )
