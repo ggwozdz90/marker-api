@@ -9,6 +9,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "fastapi[all]>=0.115.6",
     "orjson>=3.10.18",
+    "marker-pdf[full] (>=1.8.2,<2.0.0)",
 ]
 
 [project.urls]
